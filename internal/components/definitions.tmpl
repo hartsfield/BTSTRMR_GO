@@ -1,0 +1,56 @@
+{{ define "head" }}
+  <head>
+    <link rel="shortcut icon" type="image/png" href="./public/assets/disc.png"/>
+    <link rel="stylesheet" href="/public/css/main.css" type="text/css" media="screen" charset="utf-8">
+    <script type="text/javascript" src="/public/js/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+{{ end }}
+
+{{define "nav"}}
+  <div class="mainNav globalPlayer">
+    <div class="logo"><img src="public/assets/images/tape.png"></div>
+    <div class="globalTrackInfo" id="globalTrackInfo">##</div>
+    <div class="globalPPButt" onclick="pp()">
+      <img class="ppImgGlobal" id="globalPPImg" src="public/assets/images/skull.png">
+    </div>
+  </div>
+{{end}}
+
+{{define "seeker"}}
+  <div class="outerSeeker" onclick="seek(event)">
+    <div class="innerSeeker" id="innerSeeker"></div>
+  </div>
+{{end}}
+
+{{define "musicList"}}
+  <div class="music">
+    <ul>
+      {{ range $key, $track := .Tracks }}
+        <li class="musicLi" >
+          <audio id="audioID_{{ $track.ID }}" 
+                 data-title="{{$track.Title}}" 
+                 data-artist="{{$track.Artist}}" 
+                 src="public/assets/audio/{{ $track.Path }}" 
+                 ontimeupdate="tt({{$track.ID}})">
+          </audio>
+
+          <div class="coverOuter">
+            <img class="cover" src="public/assets/images/{{$track.Image}}">
+          </div>
+
+          <div class="trackInfo">
+            <div class="artist tInfo">{{$track.Artist}}</div>
+            -
+            <div class="title tInfo">{{$track.Title}}</div>
+          </div>
+
+          <div class="ppButt" id="ppButt_{{ $track.ID }}" onclick="pp({{ $track.ID }})">
+            <img class="ppImg" id="ppImg_{{$track.ID}}" src="public/assets/images/play.png">
+          </div>
+
+        </li>
+      {{ end }}
+    </ul>
+  </div>
+{{end}}

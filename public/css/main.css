@@ -1,0 +1,108 @@
+* {
+    font-family: sans;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #939393;
+}
+
+.globalPlayer {
+    align-content: stretch;
+    align-items: center;
+    background: #e0e0e0;
+    border-bottom: 1px solid #df0101;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 0.6em;
+    position: fixed;
+    width: 100%;
+}
+
+.sizer {
+    overflow: hidden;
+}
+
+.logo {
+    width: 25%;
+}
+
+.logo>img {
+    height: 3em;
+}
+
+.music {
+    padding-top: 5em;
+}
+
+.ppImgGlobal {
+    float: right;
+    height: 2em;
+    margin-right: 0.8em;
+}
+
+.globalPPButt {
+    width: 25%;
+}
+
+.musicLi {
+    align-content: stretch;
+    align-items: flex-start;
+    background: #708984;
+    border-left: 1vw solid #df0101;
+    color: #eaf0f4;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    float: left;
+    justify-content: space-between;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.tInfo {
+    display: contents;
+}
+
+.trackInfo {
+    display: inline-flex;
+    font-size: 0.8em;
+    padding: 1em;
+    width: 100%;
+}
+.ppButt {
+    display: inline-flex;
+    height: 85;
+}
+
+.cover {
+    height: 85;
+}
+
+.ppImg {
+    padding: 1.4em;
+}
+
+.outerSeeker {
+    background: #df010170;
+    height: 0.5em;
+    margin-top: 4em;
+    position: fixed;
+    width: 100%;
+}
+
+.innerSeeker {
+    background: #708984;
+    border-right: 5px solid white;
+    height: 0.5em;
+    position: fixed;
+}
+
+.title {
+    color: white;
+    font-weight: 800;
+}
