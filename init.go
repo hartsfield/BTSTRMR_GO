@@ -16,10 +16,12 @@ func init() {
 // getTracks populates the global tracks variable with audio tracks from the
 // filesystem
 func getTracks() {
-	files, _ := os.ReadDir("./public/assets/audio")
-	for _, f := range files {
-		t := makeTrack(f)
-		tracks = append(tracks, t)
+	for i := 0; i <= 5; i++ {
+		files, _ := os.ReadDir("./public/assets/audio")
+		for _, f := range files {
+			t := makeTrack(f)
+			tracks = append(tracks, t)
+		}
 	}
 }
 

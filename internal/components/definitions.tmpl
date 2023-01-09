@@ -10,7 +10,7 @@
 {{define "nav"}}
   <div class="mainNav globalPlayer">
     <div class="logo"><img src="public/assets/images/tape.png"></div>
-    <div class="globalTrackInfo" id="globalTrackInfo">##</div>
+    <div class="globalTrackInfo" id="globalTrackInfo">ToneDEF</div>
     <div class="globalPPButt" onclick="pp()">
       <img class="ppImgGlobal" id="globalPPImg" src="public/assets/images/skull.png">
     </div>
@@ -18,9 +18,11 @@
 {{end}}
 
 {{define "seeker"}}
-  <div class="outerSeeker" onclick="seek(event)">
-    <div class="innerSeeker" id="innerSeeker"></div>
-  </div>
+        <div class="seekerBox">
+    <div class="outerSeeker" onclick="seek(event)">
+      <div class="innerSeeker" id="innerSeeker"></div>
+    </div>
+        </div>
 {{end}}
 
 {{define "musicList"}}
@@ -37,7 +39,6 @@
 
           <div class="coverOuter">
             <img class="cover" src="public/assets/images/{{$track.Image}}">
-          </div>
 
           <div class="trackInfo">
             <div class="artist tInfo">{{$track.Artist}}</div>
@@ -48,9 +49,20 @@
           <div class="ppButt" id="ppButt_{{ $track.ID }}" onclick="pp({{ $track.ID }})">
             <img class="ppImg" id="ppImg_{{$track.ID}}" src="public/assets/images/play.png">
           </div>
+          </div>
 
         </li>
       {{ end }}
     </ul>
+    <div class="spacer"></div>
+  </div>
+{{end}}
+
+{{ define "footer" }}
+  <div class="footer">
+          <div class="footerInfo">
+                  <div class="footerToneDefLogo">ToneDEF</div><div class="footBy">is a project by:</div>
+                  <div class="logoFooter">Tele<div class="logoSub">Soft</div></div>
+          </div>
   </div>
 {{end}}

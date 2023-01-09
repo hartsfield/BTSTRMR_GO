@@ -1,108 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Fascinate+Inline&family=Galada&family=Modak&family=Press+Start+2P&family=Shrikhand&family=VT323&display=swap');
+@media screen and (orientation:landscape) {
+
+        .sizer {
+                margin-left: 20%;
+                margin-right: 20%;
+        }
+
+        .seekerBox {
+                width: 60%;
+        }
+
+        .globalPlayer {
+                max-width: 60%;
+        }
+}
+
+@media screen and (orientation:portrait) {
+        .seekerBox {
+                width: 100%;
+        }
+}
 * {
-    font-family: sans;
-    margin: 0;
-    padding: 0;
+        font-family: sans;
+        margin: 0;
+        padding: 0;
 }
 
 body {
-    background: #939393;
 }
 
 .globalPlayer {
-    align-content: stretch;
-    align-items: center;
-    background: #e0e0e0;
-    border-bottom: 1px solid #df0101;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    padding: 0.6em;
-    position: fixed;
-    width: 100%;
+        align-content: stretch;
+        align-items: center;
+        /* background: #ea1717; */
+        background: #bf3535;
+        border-bottom: 1px solid #df0101;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        padding: 0.6em;
+        position: fixed;
+        width: 100%;
+        color: #ffffff;
 }
 
 .sizer {
-    overflow: hidden;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        /* margin-left: 20%; */
+        /* margin-right: 20%; */
 }
 
 .logo {
-    width: 25%;
+        width: 25%;
 }
 
 .logo>img {
-    height: 3em;
+        height: 3em;
 }
 
 .music {
-    padding-top: 5em;
+        padding-top: 5em;
 }
 
 .ppImgGlobal {
-    float: right;
-    height: 2em;
-    margin-right: 0.8em;
+        float: right;
+        height: 2em;
+        margin-right: 0.8em;
 }
 
 .globalPPButt {
-    width: 25%;
+        width: 25%;
 }
 
 .musicLi {
-    align-content: stretch;
-    align-items: flex-start;
-    background: #708984;
-    border-left: 1vw solid #df0101;
-    color: #eaf0f4;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    float: left;
-    justify-content: space-between;
-    margin-top: 1em;
-    width: 100%;
+        align-content: stretch;
+        align-items: flex-start;
+        background: #fffed6;
+        color: #3baacb;
+        /* display: flex; */
+        /* flex-direction: row; */
+        /* flex-wrap: nowrap; */
+        float: left;
+        justify-content: space-between;
+        margin-top: 1em;
+        width: 100%;
 }
 
 .tInfo {
-    display: contents;
+        display: contents;
 }
 
 .trackInfo {
-    display: inline-flex;
-    font-size: 0.8em;
-    padding: 1em;
-    width: 100%;
+        display: inline-flex;
+        font-size: 0.8em;
+        padding: 1em;
+        width: 100%;
+}
+
+.globalTrackInfo {
+
+        font-family: 'Modak', cursive;
 }
 .ppButt {
-    display: inline-flex;
-    height: 85;
+        display: inline-flex;
+        height: 85;
 }
 
 .cover {
-    height: 85;
+        width: 100%;
 }
 
 .ppImg {
-    padding: 1.4em;
+        padding: 1.4em;
 }
 
 .outerSeeker {
-    background: #df010170;
-    height: 0.5em;
-    margin-top: 4em;
-    position: fixed;
-    width: 100%;
+        /* background: #000; */
+        background: #df010170;
+        height: 0.5em;
+        margin-top: 4em;
+        position: absolute;
+        width: 100%;
 }
 
 .innerSeeker {
-    background: #708984;
-    border-right: 5px solid white;
-    height: 0.5em;
-    position: fixed;
+        background: #25dfba;
+        border-right: 5px solid white;
+        height: 0.5em;
+        position: absolute;
+}
+
+.seekerBox {
+        position: fixed;
 }
 
 .title {
-    color: white;
-    font-weight: 800;
+        /* color: white; */
+        font-weight: 800;
+}
+
+.footer {
+        position: absolute;
+        bottom: 0;
+        height: 10em;
+        background: #dfdb28;
+        width: 100%;
+        border-top: 0.5em solid #b6b900;
+        text-align: center;
+}
+
+.footerInfo {
+        padding-top: 2em;
+}
+
+.logoFooter{
+        font-family: 'Modak', cursive;
+        font-size: 4em;
+        position: absolute;
+        width: 100%;
+        color: #124c3e;
+        line-height: 60px;
+}
+
+.logoSub {
+        font-family: 'Modak', cursive;
+        display: inline;
+        color: #9b0a0a;
+}
+
+.spacer {
+        height: 30vh;
+        width: 20vw;
+        display: inline-block;
+}
+
+.footerToneDefLogo {
+        font-family: 'Modak', cursive;
+        font-size: 2em;
+        line-height: 20px;
+}
+
+.footBy {
+        font-family: 'Modak', cursive;
 }

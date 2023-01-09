@@ -27,7 +27,9 @@ function pp(trackID) {
 // uses this information to seek to a relative position in the audio track
 function seek(e) {
     var track = document.getElementById("audioID_" + nowPlaying.ID);
-    var seekTo = ((track.duration / 100) * (e.clientX / window.innerWidth) * 100);
+    var sizer = document.getElementById("sizer")
+    console.log(sizer.clientWidth)
+    var seekTo = ((track.duration / 100) * ((e.clientX - sizer.offsetLeft) / sizer.clientWidth) * 100);
     track.currentTime = seekTo;
 }
 
