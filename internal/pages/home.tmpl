@@ -2,9 +2,10 @@
 <html>
   {{template "head"}}                                    
   <body>
-    <div class="sizer" id="sizer">
+          {{template "sidebar" .}}
       {{template "nav" .}}
       {{template "seeker"}}
+    <div class="sizer" id="sizer">
       {{template "musicList" .}}
       {{template "footer"}}
     </div>

@@ -27,8 +27,7 @@ function pp(trackID) {
 // uses this information to seek to a relative position in the audio track
 function seek(e) {
     var track = document.getElementById("audioID_" + nowPlaying.ID);
-    var sizer = document.getElementById("sizer")
-    console.log(sizer.clientWidth)
+    var sizer = document.getElementById("gp")
     var seekTo = ((track.duration / 100) * ((e.clientX - sizer.offsetLeft) / sizer.clientWidth) * 100);
     track.currentTime = seekTo;
 }
@@ -39,6 +38,7 @@ function tt(trackID) {
     track = document.getElementById("audioID_" + trackID);
     document.getElementById('innerSeeker').style.width = (Math.floor(track.currentTime) /
         Math.floor(track.duration)) * 100 + "%";
+    document.getElementById("spinny").style.transform = "rotate(2deg)";
 }
 
 // Listens for when a user chooses a new song and changes all icons in the music
