@@ -1,0 +1,29 @@
+{{define "trackList"}}
+  <div class="music">
+  <!-- <div class="pTitle">Fresh</div> -->
+    <ul>
+      {{ range $key, $track := .Tracks }}
+        <li class="musicLi" >
+          <audio id="audioID_{{ $track.ID }}" 
+                 data-title="{{$track.Title}}" 
+                 data-artist="{{$track.Artist}}" 
+                 src="public/assets/audio/{{ $track.Path }}" 
+                 ontimeupdate="tt({{$track.ID}})">
+          </audio>
+
+          <div class="coverOuter">
+            <img class="cover" src="public/assets/images/{{$track.Image}}">
+          </div>
+          <div class="trackInfo">
+            <div class="title tInfo">{{$track.Title}}</div>
+            <br>
+            <div class="artist tInfo">By: {{$track.Artist}}</div>
+          </div>
+          {{ template "ppButt" $track }}
+          {{ template "likeButton" $track }}
+        </li>
+      {{ end }}
+    </ul>
+    <div class="spacer"></div>
+  </div>
+{{end}}

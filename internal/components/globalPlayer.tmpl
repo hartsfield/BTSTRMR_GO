@@ -1,0 +1,11 @@
+{{define "globalPlayer"}}
+  <div class="mainNav globalPlayer" id="gp">
+  </div>
+  <script>
+    var sb = document.getElementById("sidebar").offsetWidth;
+    document.getElementById("gp").style.width = (window.innerWidth - sb) + "px";
+    document.getElementById("gp").style.marginLeft= (sb) + "px";
+  </script>
+{{end}}
+
+
