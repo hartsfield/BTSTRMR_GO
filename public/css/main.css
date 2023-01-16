@@ -133,14 +133,14 @@ input {
 
         display: inline-flex;
         height: 2.4em;
-        width: 5em;
+        width: 3.5em;
 }
 
 .globalNextButt {
         background-image: url(../assets/ff.svg);
         background-color: white;
-        background-size: 45px;
-        background-position-y: -4px;
+        background-size: 1.6em;
+        /* background-position-y: -4px; */
         padding-left: 1em;
 }
 
@@ -148,7 +148,7 @@ input {
         background-image: url(../assets/images/play.png);
         z-index: 323;
         background-color: #94af08;
-        background-size: 1.9em;
+        background-size: 1.3em;
 }
 
 
@@ -158,6 +158,7 @@ input {
         background-color: #a73939;
         width: 4em;
         padding-right: 0.5em;
+        background-size: 1.7em;
 }
 
 .globalLikeButt:before {
@@ -165,8 +166,8 @@ input {
         position: absolute;
         top: 6px;
         right: -13px;
-        width: 25px;
-        height: 25px;
+        width: 1.6em;
+        height: 1.6em;
         border: 1px solid #a73939;
         border-left: none;
         border-bottom: none;
@@ -176,7 +177,7 @@ input {
         background-color: #a73939;
         z-index: -4;
         margin-right: 4.5em;
-        margin-top: 0.05em;
+        margin-top: -0.05em;
 }
 
 .musicLi {
@@ -679,7 +680,6 @@ img {
         }
 }
 
-}
 @media screen and (orientation:landscape) {
         .sizer {
                 margin-left: 14em;

@@ -51,12 +51,12 @@ function tt(trackID) {
 document.addEventListener('play', function(e) {
     document.getElementById("controls").style.display = "unset";
         if (nowPlaying.hasPlayed == false) {
-var c1 = document.getElementById("globalPPButt").offsetWidth;
-var c2 = document.getElementById("globalNextButt").offsetWidth;
-var c3 = document.getElementById("globalLikeButt").offsetWidth;
-document.getElementById("outerSeeker").style.width = (window.innerWidth - (sb+c1+c2+c3)) + "px";
-document.getElementById("outerSeeker").style.marginLeft= (c1+c2) + "px";
-nowPlaying.hasPlayed = true;
+                var c1 = document.getElementById("globalPPButt").offsetWidth;
+                var c2 = document.getElementById("globalNextButt").offsetWidth;
+                var c3 = document.getElementById("globalLikeButt").offsetWidth;
+                document.getElementById("outerSeeker").style.width = (window.innerWidth - (sb+c1+c2+c3)) + "px";
+                document.getElementById("outerSeeker").style.marginLeft= (c1+c2) + "px";
+                nowPlaying.hasPlayed = true;
         } 
 
 
