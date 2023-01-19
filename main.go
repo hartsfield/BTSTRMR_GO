@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"html/template"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -20,12 +21,18 @@ type track struct {
 	Image  string `json:"image"`
 	Path   string `json:"path"`
 	ID     string `json:"id"`
+	Likes  int    `json:"likes"`
+	Liked  bool   `json:"liked"`
 }
 
-// page models the data structure of our html page, in this case just a list of
-// tracks
-type page struct {
-	Tracks []*track `json:"tracks"`
+// pageData is used in the HTML templates as the main page model. It is
+// composed of credentials, postData, and threadData.
+type pageData struct {
+	UserData *credentials `json:"userData"`
+	Tracks   []*track     `json:"tracks"`
+	Number   string       `json:"pageNumber,number"`
+	PageName string
+	// UserView    userView
 }
 
 // ckey/ctxkey is used as the key for the HTML context and is how we retrieve
@@ -37,10 +44,6 @@ const (
 )
 
 var (
-	// NOTE: The following two variables are initiated through your
-	// operating system environment variables and are required for
-	// TagMachine to work properly
-
 	// hmacss=hmac_sample_secret
 	// testPass=testingPassword
 
@@ -68,14 +71,46 @@ var (
 func main() {
 	// for generating IDs
 	rand.Seed(time.Now().UTC().UnixNano())
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
 	// multiplexer with / and /public set up. /public is our public assets
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", home)
+	mux.Handle("/", checkAuth(http.HandlerFunc(home)))
+	mux.Handle("/api/like", checkAuth(http.HandlerFunc(likeTrack)))
 	mux.HandleFunc("/api/signup", signup)
 	mux.HandleFunc("/api/signin", signin)
 	mux.HandleFunc("/api/logout", logout)
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+
+	IDs, err := rdb.ZRange(rdbctx, "FRESH", 0, -1).Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, ID := range IDs {
+		TrackMap, _ := rdb.HGetAll(rdbctx, "TRACK:"+ID).Result()
+		LikesInt, err := strconv.Atoi(TrackMap["Likes"])
+		if err != nil {
+			fmt.Println(err)
+		}
+		var isLiked bool
+		if TrackMap["Liked"] == "true" {
+			isLiked = true
+		} else {
+			isLiked = false
+		}
+
+		t := &track{
+			TrackMap["Artist"],
+			TrackMap["Title"],
+			TrackMap["Image"],
+			TrackMap["Path"],
+			TrackMap["ID"],
+			LikesInt,
+			isLiked,
+		}
+
+		tracks = append(tracks, t)
+	}
 
 	// Server configuration
 	srv := &http.Server{
@@ -93,10 +128,8 @@ func main() {
 	// https://www.digitalocean.com/community/tutorials/how-to-make-an-http-server-in-go
 	go func() {
 		err := srv.ListenAndServe()
-		if errors.Is(err, http.ErrServerClosed) {
-			fmt.Printf("server two closed\n")
-		} else if err != nil {
-			fmt.Printf("error listening for server two: %s\n", err)
+		if err != nil {
+			fmt.Println(err)
 		}
 		cancelCtx()
 	}()

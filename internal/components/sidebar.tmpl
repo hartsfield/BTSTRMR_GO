@@ -1,51 +1,46 @@
 {{ define "sidebar" }}
-        <div class="sidebar" id="sidebar">                                                                   
-            <button                                                                            
-              class="loginShow"                                                                
-              id="loginKey"                                                     
-              onclick="showLogin()">                                        
-              <img src="../../public/assets/key2.svg" ></img>       
-            </button>                                                                          
-          <div id="spinnyOuter" >                                                                         
+    <div class="sidebar" id="sidebar">                                                                   
+        <div class="loginShow" id="loginKey_{{.UserData.IsLoggedIn}}" onClick="showLogin({{.UserData.IsLoggedIn}})"></div>                                                      
+        <div id="spinnyOuter" >                                                                         
             <img                                                                               
-              id="spinny"                                                                      
-              class="sidebar-img-logo"                                                         
-              src="../../public/assets/disk.svg"                                   
-            />                                                                                 
+             id="spinny"                                                                      
+             class="sidebar-img-logo"                                                         
+             src="../../public/assets/disk.svg"                                   
+             />                                                                                 
             <div></div>                                                                        
-            </div>                                                                             
-                                                                                               
-          <p class="btlogo">BTSTRMR</p>                                                        
-          <p class="glogo">GLOBAL</p>                                                          
-          <li                                                                                  
-            id="fresh"                                                                         
-            onClick={this._changeSort}>                                                        
-            FRESH                                                                              
-          </li>                                                                                
-                                                                                               
-          <li                                                                                  
-            id="hot"                                                                           
-            onClick={this._changeSort}>                                                        
+        </div>                                                                             
+
+        <p class="btlogo">BTSTRMR</p>                                                        
+        <p class="glogo">GLOBAL</p>                                                          
+        <li                                                                                  
+           id="fresh"                                                                         
+           onclick="window.location = window.location.origin + '/fresh'">
+            FRESH
+        </li>                                                                                
+
+        <li                                                                                  
+           id="hot"                                                                           
+           onclick="window.location = window.location.origin + '/hot'">
             HOT                                                                                
-          </li>                                                                                
-                                                                                               
-          <div></div>                                                                          
-                                                                                               
-         <!-- {/* just some white stripes for aesthetics that turn into a rainbow on -->       
-         <!--  mouse over. */} -->                                                             
-         <div id="rainbow">                                                                    
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          <li class="rainbow" ></li>                  
-          </div>                                      
-        </div>                                         
+        </li>                                                                                
+
+        <div></div>                                                                          
+
+        <!-- {/* just some white stripes for aesthetics that turn into a rainbow on -->       
+        <!--  mouse over. */} -->                                                             
+        <div id="rainbow">                                                                    
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+            <li class="rainbow" ></li>                  
+        </div>                                      
+    </div>                                         
 {{ end }}

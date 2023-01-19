@@ -1,5 +1,3 @@
 {{ define "likeButton" }}
-  <div class="likeButt" onClick={this._updateLikes}>                                 
-    <img id="postHeart" src="../../public/assets/heart_black.svg"></img>  
-  </div>                                                         
+        <div class="likeButt liked_{{.Liked}}" id="heart_{{.ID}}" onClick="like('{{.ID}}', '{{.Liked}}')"></div>                                                         
 {{ end }}

@@ -356,20 +356,37 @@ input {
         margin-left: 2.999em;
 }
 
-#loginKey {
+
+
+#loginKey_true {
+        background-image: url(../assets/signout.svg);
         height: 2.4em;
         width: 2.4em;
         padding-top: 0.1em;
         padding-bottom: 0.1em;
+        position: fixed;
+        background-repeat: no-repeat;
+        background-origin: content-box;
+        background-position: center;
 }
 
-#logoutDoor {
+#loginKey_false {
+        background-image: url(../assets/key2.svg);
         height: 2.4em;
         width: 2.4em;
         padding-top: 0.1em;
         padding-bottom: 0.1em;
-        position: relative;
+        background-repeat: no-repeat;
+        background-origin: content-box;
+        background-position: center;
 }
+
+#errorField {                     
+        color: #d52e12;           
+        font-size: 0.7em;         
+        font-weight: bold;        
+        text-transform: uppercase;
+}                                 
 
 .loginShow {
         position: absolute;
@@ -581,10 +598,24 @@ img {
 .likeButt {
         display: inline-flex;
         float: right;
-        height: 50;
+        height: 3em;
+        width: 3em;
         margin-top: 0.7em;
         margin-right: 1.6em;
+        background-repeat: no-repeat;
+        background-origin: content-box;
+        background-position: center;
+        background-size: cover;
 }
+
+.liked_true {
+        background-image: url(../assets/heart_red.svg);
+}
+
+.liked_false {
+        background-image: url(../assets/heart_black.svg);
+}
+
 
 #hiddenAuth {
         display: none;
@@ -608,41 +639,57 @@ img {
         position: fixed;
         left: 0em;
         top: 0em;
-        /* z-index: -3; */
-}
+
+   backdrop-filter: blur(5px);
+          -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+ }
 
 .loginForm {
         padding: 1em;
         position: absolute;
         background: #000;
         border-radius: 0.5em;
+        border: 1px solid #494700;
+        box-shadow:  rgb(0 0 0 / 80%) 0px 2px 8px 0px;
+        font-size: 1em;
 }
 
-.activeAuthButt {
-        font-weight: 700;
-        /* border: 1px dashed black; */
-        border: none;
-        border-radius: 0.2em;
-        background-color: yellow;
-        display: inline-block;
-        margin-top: 0.3em;
-        padding: 0.2em;
-        cursor: pointer;
+.loginButt {
+        background-color: #FFCC00;
+        color: #6b7100;
+        border: 1px solid #6b7100;
+        text-decoration: underline;
+}
+
+.signupButt{
+        background-color: #94af08;
+        color: #224200;
+        border: 1px solid #224200;
+}
+
+.closeButt {
+        color: white;
 }
 
 .authButt {
+        padding: 0.2em;
+        border-radius: 0.2em;
         cursor: pointer;
         display: inline-block;
-        font-size: 0.7em;
-        margin-left: 1em;
-        text-decoration: underline;
-        color: white;
+        font-weight: 700;
+        margin-top: 0.3em;
+        text-transform: uppercase;
 }
 
 .passwordInput, .usernameInput {
         border-radius: 0.2em;
         padding: 0.2em;
         margin: 0.2em;
+        font-size: 1em;
 }
 @media screen and (orientation:portrait) {
         .seekerBox {

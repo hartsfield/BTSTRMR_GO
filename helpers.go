@@ -13,10 +13,71 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// exeTmpl is used to build and execute an html template.
+func exeTmpl(w http.ResponseWriter, r *http.Request, page *pageData, tmpl string) {
+	// Add the user data to the page if they're logged in.
+	c := r.Context().Value(ctxkey)
+	if a, ok := c.(*credentials); ok && a.IsLoggedIn {
+		page.UserData = a
+
+		err := templates.ExecuteTemplate(w, tmpl, page)
+		if err != nil {
+			fmt.Println(err)
+		}
+		return
+	}
+
+	err := templates.ExecuteTemplate(w, tmpl, page)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+// makePage returns a *pageData{} struct
+func makePage(r *http.Request) *pageData {
+	page := &pageData{}
+	c := r.Context().Value(ctxkey)
+	if a, ok := c.(*credentials); ok && a.IsLoggedIn {
+		page.UserData = a
+		for _, track := range tracks {
+			_, err := rdb.ZScore(rdbctx, a.Name+":LIKES", track.ID).Result()
+			if err != nil {
+				track.Liked = false
+			} else {
+				track.Liked = true
+			}
+		}
+
+		return &pageData{
+			Tracks:   tracks,
+			UserData: &credentials{},
+		}
+	}
+	for _, track := range tracks {
+		track.Liked = false
+	}
+
+	return &pageData{
+		Tracks:   tracks,
+		UserData: &credentials{},
+	}
+}
+
 // marshalCredentials is used convert a request body into a credentials{}
 // struct
 func marshalCredentials(r *http.Request) (*credentials, error) {
 	t := &credentials{}
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+	err := decoder.Decode(t)
+	if err != nil {
+		return t, err
+	}
+	return t, nil
+}
+
+func marshalTrackData(r *http.Request) (*track, error) {
+	t := &track{}
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
 	err := decoder.Decode(t)

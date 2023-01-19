@@ -1,46 +1,37 @@
 {{ define "signup" }}
-      <div id="hiddenAuth">
+    <div id="hiddenAuth">
         <div class="bgcover" onClick="hideLogin()"></div>
         <div class="auth">
-          <form class="loginForm" encType="multipart/form-data">
-            <input class="usernameInput"
-              pattern="[a-zA-Z0-9\-]{4,15}"
-              required
-              title="4-15 characters and one dash '-'"
-              id="User"
-              autocapitalize="none"
-              placeholder="username"
-              onChange={this._handleValueChange}>
-            </input>
-            <input class="passwordInput"
-              pattern=".{4,15}"
-              required
-              title="4-15 characters"
-              id="Password"
-              type="password"
-              placeholder="password"
-              onChange={this._handleValueChange}>
-            </input>
-            <div>
-              <!-- {/* This button will change depending on whether the user is --> 
-                 <!-- signing up a new account or logging into an existing account. */} -->
-              <button
-                class="activeAuthButt"
-                onClick={!this.state.showSignup ? this._handleLogin : this._handleSignup }>
-                  Login
-              </button>
-              <div
-                class="authButt"
-                onClick='console.log("test")'>
-                      Signup
-              </div>
-              <div
-                class="authButt"
-                onClick="hideLogin()">
-                no thanks
-              </div>
-            </div>
-          </form>
+            <form class="loginForm" encType="multipart/form-data">
+                <input class="usernameInput"
+                       pattern="[a-zA-Z0-9\-]{4,15}"
+                       required
+                       title="4-15 characters and one dash '-'"
+                       id="username"
+                       autocapitalize="none"
+                       placeholder="username">
+                </input>
+                <input class="passwordInput"
+                       pattern=".{4,15}"
+                       required
+                       title="4-15 characters"
+                       id="password"
+                       type="password"
+                       placeholder="password">
+                </input>
+                <div id="errorField"></div> 
+                <div>
+                    <div class="authButt loginButt" onClick="auth('signin')">
+                        Login
+                    </div>
+                    <div class="authButt signupButt" onClick="auth('signup')">
+                        Signup
+                    </div>
+                    <div class="authButt closeButt" onClick="hideLogin()">
+                        no thanks
+                    </div>
+                </div>
+            </form>
         </div>
-      </div>
+    </div>
 {{ end  }}
