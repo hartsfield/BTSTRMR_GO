@@ -6,12 +6,84 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
+
+func getFresh() (fresh []*track) {
+	IDs, err := rdb.ZRevRange(rdbctx, "FRESH", 0, -1).Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, ID := range IDs {
+		TrackMap, _ := rdb.HGetAll(rdbctx, "TRACK:"+ID).Result()
+		LikesInt, err := strconv.Atoi(TrackMap["Likes"])
+		if err != nil {
+			fmt.Println(err)
+		}
+		var isLiked bool
+		if TrackMap["Liked"] == "true" {
+			isLiked = true
+		} else {
+			isLiked = false
+		}
+
+		t := &track{
+			TrackMap["Artist"],
+			TrackMap["Title"],
+			TrackMap["Image"],
+			TrackMap["Path"],
+			TrackMap["ID"],
+			LikesInt,
+			isLiked,
+		}
+
+		fresh = append(fresh, t)
+	}
+	return
+}
+
+func getHot() (hot []*track) {
+	IDs, err := rdb.ZRevRangeByScore(rdbctx, "HOT", &redis.ZRangeBy{
+		Min:    "-inf",
+		Max:    "+inf",
+		Offset: 0,
+		Count:  -1,
+	}).Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, ID := range IDs {
+		TrackMap, _ := rdb.HGetAll(rdbctx, "TRACK:"+ID).Result()
+		LikesInt, err := strconv.Atoi(TrackMap["Likes"])
+		if err != nil {
+			fmt.Println(err)
+		}
+		var isLiked bool
+		if TrackMap["Liked"] == "true" {
+			isLiked = true
+		} else {
+			isLiked = false
+		}
+
+		t := &track{
+			TrackMap["Artist"],
+			TrackMap["Title"],
+			TrackMap["Image"],
+			TrackMap["Path"],
+			TrackMap["ID"],
+			LikesInt,
+			isLiked,
+		}
+
+		hot = append(hot, t)
+	}
+	return
+}
 
 // exeTmpl is used to build and execute an html template.
 func exeTmpl(w http.ResponseWriter, r *http.Request, page *pageData, tmpl string) {
@@ -33,13 +105,37 @@ func exeTmpl(w http.ResponseWriter, r *http.Request, page *pageData, tmpl string
 	}
 }
 
-// makePage returns a *pageData{} struct
-func makePage(r *http.Request) *pageData {
-	page := &pageData{}
+func getLikes(r *http.Request) (likedTracks []*track) {
 	c := r.Context().Value(ctxkey)
 	if a, ok := c.(*credentials); ok && a.IsLoggedIn {
-		page.UserData = a
-		for _, track := range tracks {
+		likes, err := rdb.ZRange(rdbctx, a.Name+":LIKES", 0, -1).Result()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		for _, trackID := range likes {
+			data, _ := rdb.HGetAll(rdbctx, "TRACK:"+trackID).Result()
+			i, _ := strconv.Atoi(data["Likes"])
+			t := &track{
+				data["Artist"],
+				data["Title"],
+				data["Image"],
+				data["Path"],
+				data["ID"],
+				i,
+				true,
+			}
+			likedTracks = append(likedTracks, t)
+		}
+
+	}
+	return
+}
+
+func setLikes(r *http.Request, ts []*track) []*track {
+	c := r.Context().Value(ctxkey)
+	if a, ok := c.(*credentials); ok && a.IsLoggedIn {
+		for _, track := range ts {
 			_, err := rdb.ZScore(rdbctx, a.Name+":LIKES", track.ID).Result()
 			if err != nil {
 				track.Liked = false
@@ -47,20 +143,12 @@ func makePage(r *http.Request) *pageData {
 				track.Liked = true
 			}
 		}
-
-		return &pageData{
-			Tracks:   tracks,
-			UserData: &credentials{},
-		}
+		return ts
 	}
-	for _, track := range tracks {
+	for _, track := range ts {
 		track.Liked = false
 	}
-
-	return &pageData{
-		Tracks:   tracks,
-		UserData: &credentials{},
-	}
+	return ts
 }
 
 // marshalCredentials is used convert a request body into a credentials{}

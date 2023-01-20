@@ -117,8 +117,8 @@ function auth(path) {
         }));
 }
 
-function like(trackID, isLiked) {
-        if (isLiked == "false") {
+function like(trackID, isLoggedIn) {
+        if (isLoggedIn == "false") {
                 showLogin();
         } else {
                 var xhr = new XMLHttpRequest();

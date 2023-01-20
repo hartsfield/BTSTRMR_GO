@@ -114,7 +114,11 @@ func addToRedis(t *track) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	pipe.ZAdd(rdbctx, "FRESH", makeZmem(t.ID))
+
+	zm := makeZmem(t.ID)
+
+	pipe.ZAdd(rdbctx, "FRESH", zm)
+	pipe.ZAdd(rdbctx, "HOT", zm)
 	pipe.Exec(rdbctx)
 	fmt.Println(t.Title, t.ID)
 }

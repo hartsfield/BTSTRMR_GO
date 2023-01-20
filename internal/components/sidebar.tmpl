@@ -12,18 +12,19 @@
 
         <p class="btlogo">BTSTRMR</p>                                                        
         <p class="glogo">GLOBAL</p>                                                          
-        <li                                                                                  
-           id="fresh"                                                                         
-           onclick="window.location = window.location.origin + '/fresh'">
+
+        <li class="fresh" onclick="window.location = window.location.origin + '/fresh'">
             FRESH
         </li>                                                                                
 
-        <li                                                                                  
-           id="hot"                                                                           
-           onclick="window.location = window.location.origin + '/hot'">
+        <li class="hot" onclick="window.location = window.location.origin + '/hot'">
             HOT                                                                                
         </li>                                                                                
 
+        <li class="userLikes_{{.UserData.IsLoggedIn}}" onclick="window.location = window.location.origin + '/mylikes'">
+            ♡ ♡ ♡
+        </li>
+        
         <div></div>                                                                          
 
         <!-- {/* just some white stripes for aesthetics that turn into a rainbow on -->       

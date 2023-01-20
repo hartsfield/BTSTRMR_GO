@@ -616,6 +616,13 @@ img {
         background-image: url(../assets/heart_black.svg);
 }
 
+.userLikes_true {
+        font-weight: bolder;
+}
+
+.userLikes_false {
+        display: none;
+}
 
 #hiddenAuth {
         display: none;

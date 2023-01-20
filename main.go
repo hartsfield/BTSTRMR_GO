@@ -8,7 +8,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -76,41 +75,44 @@ func main() {
 	// multiplexer with / and /public set up. /public is our public assets
 	mux := http.NewServeMux()
 	mux.Handle("/", checkAuth(http.HandlerFunc(home)))
+	mux.Handle("/fresh", checkAuth(http.HandlerFunc(freshView)))
+	mux.Handle("/hot", checkAuth(http.HandlerFunc(hotView)))
 	mux.Handle("/api/like", checkAuth(http.HandlerFunc(likeTrack)))
+	mux.Handle("/mylikes", checkAuth(http.HandlerFunc(likesView)))
 	mux.HandleFunc("/api/signup", signup)
 	mux.HandleFunc("/api/signin", signin)
 	mux.HandleFunc("/api/logout", logout)
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-	IDs, err := rdb.ZRange(rdbctx, "FRESH", 0, -1).Result()
-	if err != nil {
-		fmt.Println(err)
-	}
-	for _, ID := range IDs {
-		TrackMap, _ := rdb.HGetAll(rdbctx, "TRACK:"+ID).Result()
-		LikesInt, err := strconv.Atoi(TrackMap["Likes"])
-		if err != nil {
-			fmt.Println(err)
-		}
-		var isLiked bool
-		if TrackMap["Liked"] == "true" {
-			isLiked = true
-		} else {
-			isLiked = false
-		}
+	// IDs, err := rdb.ZRange(rdbctx, "FRESH", 0, -1).Result()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// for _, ID := range IDs {
+	// 	TrackMap, _ := rdb.HGetAll(rdbctx, "TRACK:"+ID).Result()
+	// 	LikesInt, err := strconv.Atoi(TrackMap["Likes"])
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// 	var isLiked bool
+	// 	if TrackMap["Liked"] == "true" {
+	// 		isLiked = true
+	// 	} else {
+	// 		isLiked = false
+	// 	}
 
-		t := &track{
-			TrackMap["Artist"],
-			TrackMap["Title"],
-			TrackMap["Image"],
-			TrackMap["Path"],
-			TrackMap["ID"],
-			LikesInt,
-			isLiked,
-		}
+	// 	t := &track{
+	// 		TrackMap["Artist"],
+	// 		TrackMap["Title"],
+	// 		TrackMap["Image"],
+	// 		TrackMap["Path"],
+	// 		TrackMap["ID"],
+	// 		LikesInt,
+	// 		isLiked,
+	// 	}
 
-		tracks = append(tracks, t)
-	}
+	// 	tracks = append(tracks, t)
+	// }
 
 	// Server configuration
 	srv := &http.Server{

@@ -9,8 +9,11 @@ import (
 // home is the home page, which is just a list of tracks and the global
 // audio player and navigation.
 func home(w http.ResponseWriter, r *http.Request) {
-	page := makePage(r)
-	exeTmpl(w, r, page, "home.tmpl")
+	var page pageData
+	ts := getFresh()
+	page.Tracks = setLikes(r, ts)
+	page.UserData = &credentials{}
+	exeTmpl(w, r, &page, "main.tmpl")
 }
 
 func likeTrack(w http.ResponseWriter, r *http.Request) {
@@ -35,8 +38,15 @@ func likeTrack(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
+		// If the track is already in the users LIKES, we remove it,
+		// and decrement the score from FRESH
 		if result == 0 {
 			_, err := rdb.ZRem(rdbctx, a.Name+":LIKES", td.ID).Result()
+			if err != nil {
+				log.Print(err)
+			}
+
+			_, err = rdb.ZIncrBy(rdbctx, "HOT", -1, td.ID).Result()
 			if err != nil {
 				log.Print(err)
 			}
@@ -49,7 +59,7 @@ func likeTrack(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		pipe.ZIncrBy(rdbctx, "FRESH", 1, td.ID)
+		pipe.ZIncrBy(rdbctx, "HOT", 1, td.ID)
 		_, err = pipe.Exec(rdbctx)
 		if err != nil {
 			fmt.Println(err)
@@ -68,4 +78,27 @@ func likeTrack(w http.ResponseWriter, r *http.Request) {
 			"error":   "false",
 		})
 	}
+}
+
+func likesView(w http.ResponseWriter, r *http.Request) {
+	var page pageData
+	page.Tracks = getLikes(r)
+	page.UserData = &credentials{}
+	exeTmpl(w, r, &page, "main.tmpl")
+}
+
+func freshView(w http.ResponseWriter, r *http.Request) {
+	var page pageData
+	ts := getFresh()
+	page.Tracks = setLikes(r, ts)
+	page.UserData = &credentials{}
+	exeTmpl(w, r, &page, "main.tmpl")
+}
+
+func hotView(w http.ResponseWriter, r *http.Request) {
+	var page pageData
+	ts := getHot()
+	page.Tracks = setLikes(r, ts)
+	page.UserData = &credentials{}
+	exeTmpl(w, r, &page, "main.tmpl")
 }

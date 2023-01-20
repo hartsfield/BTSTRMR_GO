@@ -7,12 +7,12 @@
           <audio id="audioID_{{ $track.ID }}" 
                  data-title="{{$track.Title}}" 
                  data-artist="{{$track.Artist}}" 
-                 src="public/assets/audio/{{ $track.Path }}" 
+                 src="../../public/assets/audio/{{ $track.Path }}" 
                  ontimeupdate="tt({{$track.ID}})">
           </audio>
 
           <div class="coverOuter">
-            <img class="cover" src="public/assets/images/{{$track.Image}}">
+            <img class="cover" src="../../public/assets/images/{{$track.Image}}">
           </div>
           <div class="trackInfo">
             <div class="title tInfo">{{$track.Title}}</div>
@@ -20,7 +20,7 @@
             <div class="artist tInfo">By: {{$track.Artist}}</div>
           </div>
           {{ template "ppButt" $track }}
-          {{ template "likeButton" $track }}
+          <div class="likeButt liked_{{$track.Liked}}" id="heart_{{$track.ID}}" onClick="like('{{$track.ID}}', '{{$.UserData.IsLoggedIn}}')"></div> 
         </li>
       {{ end }}
     </ul>
