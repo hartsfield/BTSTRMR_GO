@@ -1,16 +1,20 @@
 {{define "trackList"}}
-  <div class="music">
-  <!-- <div class="pTitle">Fresh</div> -->
+  <div class="music" id="trackList">
+    <div class="listTitle">{{.PageName}}</div>
     <ul>
       {{ range $key, $track := .Tracks }}
-        <li class="musicLi" >
-          <audio id="audioID_{{ $track.ID }}" 
+              <li class="musicLi" id="{{$track.ID}}"
                  data-title="{{$track.Title}}" 
-                 data-artist="{{$track.Artist}}" 
-                 src="../../public/assets/audio/{{ $track.Path }}" 
-                 ontimeupdate="tt({{$track.ID}})">
+                 data-artist="{{$track.Artist}}"
+                      >
+          <!-- <audio id="audioID_{{ $track.ID }}" --> 
+          <!--        data-title="{{$track.Title}}" --> 
+          <!--        data-artist="{{$track.Artist}}" --> 
+          <!--        src="../../public/assets/audio/{{ $track.Path }}" --> 
+          <!--        ontimeupdate="tt({{$track.ID}})"> -->
+          <!-- </audio> -->
+          <audio id="audioID_{{ $track.ID }}">
           </audio>
-
           <div class="coverOuter">
             <img class="cover" src="../../public/assets/images/{{$track.Image}}">
           </div>
@@ -27,3 +31,4 @@
     <div class="spacer"></div>
   </div>
 {{end}}
+

@@ -1,19 +1,73 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
-// home is the home page, which is just a list of tracks and the global
-// audio player and navigation.
-func home(w http.ResponseWriter, r *http.Request) {
+func freshView(w http.ResponseWriter, r *http.Request) {
 	var page pageData
 	ts := getFresh()
 	page.Tracks = setLikes(r, ts)
 	page.UserData = &credentials{}
+	page.PageName = "LATEST TRACKS"
 	exeTmpl(w, r, &page, "main.tmpl")
+}
+
+func hotView(w http.ResponseWriter, r *http.Request) {
+	var page pageData
+	ts := getHot()
+	page.Tracks = setLikes(r, ts)
+	page.UserData = &credentials{}
+	page.PageName = "HOTTEST TRACKS"
+	exeTmpl(w, r, &page, "main.tmpl")
+}
+
+func likesView(w http.ResponseWriter, r *http.Request) {
+	name := strings.Split(r.URL.Path, "/")[2]
+	var page pageData
+	page.Tracks = setLikes(r, getLikes(r, name))
+	page.UserData = &credentials{}
+	page.PageName = name + "'s Liked Tracks"
+	exeTmpl(w, r, &page, "main.tmpl")
+}
+
+func getTracks(w http.ResponseWriter, r *http.Request) {
+	page, err := marshalPageData(r)
+	if err != nil {
+		log.Println(err)
+	}
+
+	var ts []*track
+	log.Println(page.Category)
+	if page.Category == "FRESH" {
+		log.Println("test fresj")
+		ts = getFresh()
+		page.PageName = "LATEST TRACKS"
+	} else if page.Category == "HOT" {
+		log.Println("test hot")
+		ts = getHot()
+		page.PageName = "HOTTEST TRACKS"
+	} else {
+		ts = setLikes(r, getLikes(r, page.Category))
+		page.PageName = page.Category + "'s Liked Tracks"
+	}
+	page.Tracks = setLikes(r, ts)
+	page.UserData = &credentials{}
+
+	var b bytes.Buffer
+	err = templates.ExecuteTemplate(&b, "updateList.tmpl", page)
+	if err != nil {
+		fmt.Println(err)
+	}
+	ajaxResponse(w, map[string]string{
+		"success":  "true",
+		"error":    "false",
+		"template": b.String(),
+	})
 }
 
 func likeTrack(w http.ResponseWriter, r *http.Request) {
@@ -78,27 +132,4 @@ func likeTrack(w http.ResponseWriter, r *http.Request) {
 			"error":   "false",
 		})
 	}
-}
-
-func likesView(w http.ResponseWriter, r *http.Request) {
-	var page pageData
-	page.Tracks = getLikes(r)
-	page.UserData = &credentials{}
-	exeTmpl(w, r, &page, "main.tmpl")
-}
-
-func freshView(w http.ResponseWriter, r *http.Request) {
-	var page pageData
-	ts := getFresh()
-	page.Tracks = setLikes(r, ts)
-	page.UserData = &credentials{}
-	exeTmpl(w, r, &page, "main.tmpl")
-}
-
-func hotView(w http.ResponseWriter, r *http.Request) {
-	var page pageData
-	ts := getHot()
-	page.Tracks = setLikes(r, ts)
-	page.UserData = &credentials{}
-	exeTmpl(w, r, &page, "main.tmpl")
 }

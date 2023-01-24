@@ -15,6 +15,9 @@ input {
         border-bottom: 1px solid black;
 }
 
+.goHome {
+        cursor: pointer;
+}
 
 .globalPlayer {
         align-content: stretch;
@@ -151,6 +154,19 @@ input {
         background-size: 1.3em;
 }
 
+.listTitle {
+        /* background-color: #c50a85; */
+        background-color: #972a72;
+        border-radius: 0.5em;
+        color: #ffd2fb;
+        font-family: 'Modak', cursive;
+        font-size: 2em;
+        padding-left: 0.8em;
+        padding-top: 0.3em;
+        padding-bottom: 0.18em;
+        box-shadow: rgb(99 99 99 / 20%) 0px 2px 8px 0px;
+        border: 1px solid #7e004f;
+}
 
 .globalLikeButt {
         background-image: url(../assets/heart.svg);
@@ -405,10 +421,10 @@ input {
         display: block;
 }
 
-#mobile_spinny {
-        display: inline-block;
-        vertical-align: middle;
-}
+/* #mobile_spinny { */
+/*         display: inline-block; */
+/*         vertical-align: middle; */
+/* } */
 
 .sidebar-img-logo {
         width: 5em;
@@ -647,13 +663,13 @@ img {
         left: 0em;
         top: 0em;
 
-   backdrop-filter: blur(5px);
-          -webkit-filter: blur(5px);
-  -moz-filter: blur(5px);
-  -o-filter: blur(5px);
-  -ms-filter: blur(5px);
-  filter: blur(5px);
- }
+        backdrop-filter: blur(5px);
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -o-filter: blur(5px);
+        -ms-filter: blur(5px);
+        filter: blur(5px);
+}
 
 .loginForm {
         padding: 1em;
@@ -707,12 +723,18 @@ img {
                 position: fixed;
         }
         .sidebar {
-                display: none;
+                width: 5em;;
         }
         .sizer {
                 max-width: 100%;
-                width: 100%;
                 overflow: hidden;
+        }
+        .sidebar-img-logo {
+                width: 3em;
+                margin-left: 1em;
+        }
+        .loginShow {
+                display: none;
         }
         .cover {
                 border-top-left-radius: unset;

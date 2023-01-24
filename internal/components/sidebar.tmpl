@@ -1,6 +1,7 @@
 {{ define "sidebar" }}
     <div class="sidebar" id="sidebar">                                                                   
         <div class="loginShow" id="loginKey_{{.UserData.IsLoggedIn}}" onClick="showLogin({{.UserData.IsLoggedIn}})"></div>                                                      
+        <div class="goHome" onclick="window.location.href = window.location.origin">
         <div id="spinnyOuter" >                                                                         
             <img                                                                               
              id="spinny"                                                                      
@@ -12,16 +13,17 @@
 
         <p class="btlogo">BTSTRMR</p>                                                        
         <p class="glogo">GLOBAL</p>                                                          
+        </div>
 
-        <li class="fresh" onclick="window.location = window.location.origin + '/fresh'">
+        <li class="fresh" onClick="loadTracks('FRESH')">
             FRESH
         </li>                                                                                
 
-        <li class="hot" onclick="window.location = window.location.origin + '/hot'">
+        <li class="hot" onClick="loadTracks('HOT')">
             HOT                                                                                
         </li>                                                                                
 
-        <li class="userLikes_{{.UserData.IsLoggedIn}}" onclick="window.location = window.location.origin + '/mylikes'">
+        <li class="userLikes_{{.UserData.IsLoggedIn}}" onclick="loadTracks({{.UserData.Name}})">
             ♡ ♡ ♡
         </li>
         

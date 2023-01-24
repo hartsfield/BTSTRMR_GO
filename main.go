@@ -30,8 +30,8 @@ type pageData struct {
 	UserData *credentials `json:"userData"`
 	Tracks   []*track     `json:"tracks"`
 	Number   string       `json:"pageNumber,number"`
-	PageName string
-	// UserView    userView
+	PageName string       `json:"pageName"`
+	Category string       `json:"category"`
 }
 
 // ckey/ctxkey is used as the key for the HTML context and is how we retrieve
@@ -64,7 +64,7 @@ var (
 	// for passing the token/credentials around.
 	rdbctx = context.Background()
 
-	tracks = []*track{}
+	// tracks = []*track{}
 )
 
 func main() {
@@ -74,45 +74,16 @@ func main() {
 
 	// multiplexer with / and /public set up. /public is our public assets
 	mux := http.NewServeMux()
-	mux.Handle("/", checkAuth(http.HandlerFunc(home)))
+	mux.Handle("/", checkAuth(http.HandlerFunc(freshView)))
 	mux.Handle("/fresh", checkAuth(http.HandlerFunc(freshView)))
 	mux.Handle("/hot", checkAuth(http.HandlerFunc(hotView)))
 	mux.Handle("/api/like", checkAuth(http.HandlerFunc(likeTrack)))
-	mux.Handle("/mylikes", checkAuth(http.HandlerFunc(likesView)))
+	mux.Handle("/api/getTracks", checkAuth(http.HandlerFunc(getTracks)))
+	mux.Handle("/♥/", checkAuth(http.HandlerFunc(likesView)))
 	mux.HandleFunc("/api/signup", signup)
 	mux.HandleFunc("/api/signin", signin)
 	mux.HandleFunc("/api/logout", logout)
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
-
-	// IDs, err := rdb.ZRange(rdbctx, "FRESH", 0, -1).Result()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// for _, ID := range IDs {
-	// 	TrackMap, _ := rdb.HGetAll(rdbctx, "TRACK:"+ID).Result()
-	// 	LikesInt, err := strconv.Atoi(TrackMap["Likes"])
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-	// 	var isLiked bool
-	// 	if TrackMap["Liked"] == "true" {
-	// 		isLiked = true
-	// 	} else {
-	// 		isLiked = false
-	// 	}
-
-	// 	t := &track{
-	// 		TrackMap["Artist"],
-	// 		TrackMap["Title"],
-	// 		TrackMap["Image"],
-	// 		TrackMap["Path"],
-	// 		TrackMap["ID"],
-	// 		LikesInt,
-	// 		isLiked,
-	// 	}
-
-	// 	tracks = append(tracks, t)
-	// }
 
 	// Server configuration
 	srv := &http.Server{

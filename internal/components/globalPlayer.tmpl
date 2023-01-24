@@ -1,11 +1,22 @@
 {{define "globalPlayer"}}
-  <div class="mainNav globalPlayer" id="gp">
-  </div>
-  <script>
-    var sb = document.getElementById("sidebar").offsetWidth;
-    document.getElementById("gp").style.width = (window.innerWidth - sb) + "px";
-    document.getElementById("gp").style.marginLeft= (sb) + "px";
-  </script>
+        <div class="seekerBox" id="seekerBox">
+                <audio id="audioID_global"> </audio>
+
+                <div class="controls" id="controls">
+                        <div class="globalPPButt controlButt" id="ppImg_global" onclick="pp()"></div>
+                        <div class="globalNextButt controlButt" id="globalNextButt" onclick="nextTrack(trackID)"></div>
+                        <div class="globalLikeButt controlButt" id="globalLikeButt" onclick="likeTrack(trackID)"></div>
+                </div>
+
+                <div class="outerSeeker" id="outerSeeker">
+                        <div class="innerSeeker" id="innerSeeker"></div>
+                </div>
+
+                <div class="globalTrackInfo" id="globalTrackInfo" onclick="seek(event)">BTSTRMR</div>
+        </div>
+        <script>
+var sb = document.getElementById("sidebar").offsetWidth;
+document.getElementById("seekerBox").style.width = (window.innerWidth - (sb)) + "px";
+document.getElementById("seekerBox").style.marginLeft = (sb) + "px";
+        </script>
 {{end}}
-
-

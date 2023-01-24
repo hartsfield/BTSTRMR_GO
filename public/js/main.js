@@ -2,42 +2,63 @@
 // information
 var nowPlaying = {
         "isPlaying": false,
-        "hasPlayed": false
+        "hasPlayed": false,
+        "ID": undefined,
+        "path": undefined,
 };
 
 // Pause/play (pp()): Changes the pause/play icon to reflect the state of the 
 // track
-function pp(trackID) {
-        if (trackID == undefined) {
-                trackID = nowPlaying.ID;
+var track
+function pp(trackID, trackPath) {
+        if (nowPlaying.ID != trackID && trackID != undefined) {
+                if (nowPlaying.ID != undefined) {
+                track.pause();
+                track.src = "../public/assets/audio/" + trackPath;
+                }
+                console.log("1");
+                track = document.getElementById("audioID_global");
+                track.addEventListener('timeupdate', (event) => {
+                                tt()
+                });
         }
-        var track = document.getElementById("audioID_" + trackID);
+
+        if (trackID == undefined && trackPath == undefined) {
+                console.log("2");
+                trackID = nowPlaying.ID;
+        } else if (nowPlaying.path != trackPath){
+                console.log("3");
+                track.src = "../public/assets/audio/" + trackPath;
+                nowPlaying.path = trackPath;
+        }
+        console.log("4");
+
+        console.log(track, track.paused)
         if (track.paused) {
-                document.getElementById("ppImg_" + trackID).src = "public/assets/pause.png";
-                document.getElementById("globalPPButt").style.backgroundImage = "url('public/assets/pause.png')";
-                nowPlaying.ID = trackID;
+                console.log("isPaused");
                 track.play();
+                nowPlaying.ID = trackID;
+                document.getElementById("ppImg_" + trackID).src = "public/assets/pause.png";
+                document.getElementById("ppImg_global").style.backgroundImage = "url('public/assets/pause.png')";
         } else {
+                console.log("isPlaying");
                 track.pause();
                 document.getElementById("ppImg_" + trackID).src = "public/assets/images/play.png";
-                document.getElementById("globalPPButt").style.backgroundImage = "url('public/assets/images/play.png')";
+                document.getElementById("ppImg_global").style.backgroundImage = "url('public/assets/images/play.png')";
         }
 }
 
 // seek() gets the mouses x-cooridinate when it clicks the outerSeeker div and
 // uses this information to seek to a relative position in the audio track
 function seek(e) {
-        var track = document.getElementById("audioID_" + nowPlaying.ID);
-        var sizer = document.getElementById("outerSeeker")
-        console.log(e.clientX);
+        var sizer = document.getElementById("outerSeeker");
         var seekTo = ((track.duration / 100) * ((e.clientX - sizer.offsetLeft - (window.innerWidth - sizer.offsetLeft - sizer.offsetWidth)) / sizer.offsetWidth) * 100);
         track.currentTime = seekTo;
 }
 
 // Time tracker (tt()): Runs ontimeupdate and expands the innerSeeker element on
 // the global player to reflect the time position of the audio track
-function tt(trackID) {
-        track = document.getElementById("audioID_" + trackID);
+function tt() {
         document.getElementById('innerSeeker').style.width = (Math.floor(track.currentTime) /
                 Math.floor(track.duration)) * 100 + "%";
         document.getElementById("spinny").style.transform = "rotate("+Math.floor(track.currentTime)*5+"deg)";
@@ -50,30 +71,34 @@ function tt(trackID) {
 document.addEventListener('play', function(e) {
                 document.getElementById("controls").style.display = "unset";
                 if (nowPlaying.hasPlayed == false) {
-                        var c1 = document.getElementById("globalPPButt").offsetWidth;
+                        var c1 = document.getElementById("ppImg_global").offsetWidth;
                         var c2 = document.getElementById("globalNextButt").offsetWidth;
                         var c3 = document.getElementById("globalLikeButt").offsetWidth;
                         document.getElementById("outerSeeker").style.width = (window.innerWidth - (sb+c1+c2+c3)) + "px";
                         document.getElementById("outerSeeker").style.marginLeft= (c1+c2) + "px";
                         nowPlaying.hasPlayed = true;
                 } 
-
-
-                var audios = document.getElementsByTagName('audio');
-                for (var i = 0, len = audios.length; i < len; i++) {
-                        if (audios[i] != e.target) {
-                                audios[i].pause();
-                                var pp = document.getElementById("ppImg_" + audios[i].id.split("_").pop());
-                                pp.src = "public/assets/images/play.png";
-                        } else {
-                                nowPlaying.artist = audios[i].dataset.artist;
-                                nowPlaying.title = audios[i].dataset.title;
-                                nowPlaying.isPlaying = true;
-                                document.getElementById("globalTrackInfo").innerHTML = nowPlaying.artist +
-                                                                     " - " + nowPlaying.title;
-                        }
-                }
+                updateTrackList();
 }, true);
+
+function updateTrackList() {
+    var audios = document.getElementsByClassName('musicLi');
+    for (var i = 0, len = audios.length; i < len; i++) {
+        var pp = document.getElementById("ppImg_" + audios[i].id);
+        if (audios[i].id != nowPlaying.ID) {
+                // var pp = document.getElementById("ppImg_" + audios[i].id.split("_").pop());
+                pp.src = "public/assets/images/play.png";
+        } else {
+                console.log(audios[i].id, nowPlaying.ID);
+                nowPlaying.isPlaying = true;
+                nowPlaying.artist = audios[i].dataset.artist;
+                nowPlaying.title = audios[i].dataset.title;
+                document.getElementById("globalTrackInfo").innerHTML = nowPlaying.artist +
+                                                     " - " + nowPlaying.title;
+                pp.src = "public/assets/images/pause.png";
+        }
+    }
+}
 
 function showLogin(isLoggedIn) {
         if (isLoggedIn) {
@@ -147,5 +172,41 @@ function like(trackID, isLoggedIn) {
                                         id: trackID,
                 }));
 
-                                }
+        }
+}
+
+function loadTracks(category) {
+  var xhr = new XMLHttpRequest();
+
+          xhr.open("POST", "/api/getTracks");
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.onload = function() {
+                  if (xhr.status === 200) {
+                          var res = JSON.parse(xhr.responseText);
+                          if (res.success == "true") {
+                                  var listDiv = document.getElementById("sizer");
+                                  listDiv.innerHTML = res.template;
+                                  updateTrackList();
+                                  if (category == "FRESH" || category == "HOT") {
+                                        window.history.pushState({},
+                                                "page", "/#/" + category);
+                                  } else {
+                                        window.history.pushState({},
+                                                "page", "/♥/" + category);
+                                  }
+                                  window.scrollTo(0, 0);
+                                  // listDiv.insertAdjacentHTML("beforeend", res.template);
+                          } else {
+                                  // handle error
+                          }
+                  }
+          };
+
+          // For now, all we're sending is a username and password, but we may start
+          // asking for email or mobile number at some point.
+          console.log(category);
+          xhr.send(JSON.stringify({
+                                  category: category,
+          }));
+
 }

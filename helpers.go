@@ -85,6 +85,17 @@ func getHot() (hot []*track) {
 	return
 }
 
+func marshalPageData(r *http.Request) (*pageData, error) {
+	t := &pageData{}
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+	err := decoder.Decode(t)
+	if err != nil {
+		return t, err
+	}
+	return t, nil
+}
+
 // exeTmpl is used to build and execute an html template.
 func exeTmpl(w http.ResponseWriter, r *http.Request, page *pageData, tmpl string) {
 	// Add the user data to the page if they're logged in.
@@ -105,10 +116,10 @@ func exeTmpl(w http.ResponseWriter, r *http.Request, page *pageData, tmpl string
 	}
 }
 
-func getLikes(r *http.Request) (likedTracks []*track) {
+func getLikes(r *http.Request, name string) (likedTracks []*track) {
 	c := r.Context().Value(ctxkey)
 	if a, ok := c.(*credentials); ok && a.IsLoggedIn {
-		likes, err := rdb.ZRange(rdbctx, a.Name+":LIKES", 0, -1).Result()
+		likes, err := rdb.ZRange(rdbctx, name+":LIKES", 0, -1).Result()
 		if err != nil {
 			fmt.Println(err)
 		}

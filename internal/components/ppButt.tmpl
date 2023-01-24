@@ -1,5 +1,5 @@
 {{ define "ppButt" }}
-<div class="ppButt" id="ppButt_{{ .ID }}" onclick="pp({{ .ID }})">
+<div class="ppButt" id="ppButt_{{ .ID }}" onclick="pp({{ .ID }}, {{.Path}})">
   <img class="ppImg" id="ppImg_{{ .ID }}" src="public/assets/images/play.png">
 </div>
 {{ end }}
