@@ -1,22 +1,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
-    {{template "head"}}                                    
-    <body>
-        {{template "signup"}}
-        {{template "sidebar" .}}
-        {{template "globalPlayer" . }}
-        <div class="sizer" id="sizer">
-            {{template "trackList" .}}
-            {{template "footer"}}
-        </div>
-    </body>
-<script>
-        if (window.innerWidth < window.innerHeight) {
-  var sb = document.getElementById("sidebar").offsetWidth;
-  var s = document.getElementById("sizer");
-  s.style.width = (window.innerWidth - (sb)) + "px";
-  s.style.marginLeft = (sb) + "px";
-        }
-</script>
+        {{template "head"}}                                    
+        <body>
+                {{template "globalPlayer" . }}
+                <div id="updateDiv">
+                        {{template "signup"}}
+                        {{template "sidebar" .}}
+                        <div class="sizer" id="sizer">
+                                {{template "trackList" .}}
+                                {{template "footer"}}
+                        </div>
+                </div>
+                <script type="text/javascript">
+                        if (window.innerWidth < window.innerHeight) {
+                                var sb = document.getElementById("sidebar");
+                                var s = document.getElementById("sizer");
+                                var player = document.getElementById("seekerBox");
+                                s.style.width = (window.innerWidth - (sb.offsetWidth)) + "px";
+                                s.style.marginLeft = (sb.offsetWidth) + "px";
+                                //                        sb.style.height = window.innerHeight - player.innerHeight + "px";
+                                //                       sb.style.top = player.innerHeight + "px";
+                        } else {
+                                var sb = document.getElementById("sidebar").offsetWidth;
+                                document.getElementById("seekerBox").style.width = (window.innerWidth - (sb)) + "px";
+                                document.getElementById("seekerBox").style.marginLeft = (sb) + "px";
+                        }
+                </script>
+        </body>
 </html>
 

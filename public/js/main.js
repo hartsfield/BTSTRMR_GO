@@ -4,7 +4,7 @@ var nowPlaying = {
         "isPlaying": false,
         "hasPlayed": false,
         "ID": undefined,
-        "path": undefined,
+        "path": undefined
 };
 
 // Pause/play (pp()): Changes the pause/play icon to reflect the state of the 
@@ -13,8 +13,8 @@ var track
 function pp(trackID, trackPath) {
         if (nowPlaying.ID != trackID && trackID != undefined) {
                 if (nowPlaying.ID != undefined) {
-                track.pause();
-                track.src = "../public/assets/audio/" + trackPath;
+                        track.pause();
+                        track.src = "../public/assets/audio/" + trackPath;
                 }
                 console.log("1");
                 track = document.getElementById("audioID_global");
@@ -52,7 +52,8 @@ function pp(trackID, trackPath) {
 // uses this information to seek to a relative position in the audio track
 function seek(e) {
         var sizer = document.getElementById("outerSeeker");
-        var seekTo = ((track.duration / 100) * ((e.clientX - sizer.offsetLeft - (window.innerWidth - sizer.offsetLeft - sizer.offsetWidth)) / sizer.offsetWidth) * 100);
+        var playButt = document.getElementById("ppImg_global");
+        var seekTo = ((track.duration / 100) * ((e.clientX - sizer.offsetLeft - (window.innerWidth - sizer.offsetLeft - sizer.offsetWidth - playButt.offsetWidth)) / sizer.offsetWidth) * 100);
         track.currentTime = seekTo;
 }
 
@@ -82,22 +83,22 @@ document.addEventListener('play', function(e) {
 }, true);
 
 function updateTrackList() {
-    var audios = document.getElementsByClassName('musicLi');
-    for (var i = 0, len = audios.length; i < len; i++) {
-        var pp = document.getElementById("ppImg_" + audios[i].id);
-        if (audios[i].id != nowPlaying.ID) {
-                // var pp = document.getElementById("ppImg_" + audios[i].id.split("_").pop());
-                pp.src = "public/assets/images/play.png";
-        } else {
-                console.log(audios[i].id, nowPlaying.ID);
-                nowPlaying.isPlaying = true;
-                nowPlaying.artist = audios[i].dataset.artist;
-                nowPlaying.title = audios[i].dataset.title;
-                document.getElementById("globalTrackInfo").innerHTML = nowPlaying.artist +
-                                                     " - " + nowPlaying.title;
-                pp.src = "public/assets/images/pause.png";
+        var audios = document.getElementsByClassName('musicLi');
+        for (var i = 0, len = audios.length; i < len; i++) {
+                var pp = document.getElementById("ppImg_" + audios[i].id);
+                if (audios[i].id != nowPlaying.ID) {
+                        // var pp = document.getElementById("ppImg_" + audios[i].id.split("_").pop());
+                        pp.src = "public/assets/images/play.png";
+                } else {
+                        console.log(audios[i].id, nowPlaying.ID);
+                        nowPlaying.isPlaying = true;
+                        nowPlaying.artist = audios[i].dataset.artist;
+                        nowPlaying.title = audios[i].dataset.title;
+                        document.getElementById("globalTrackInfo").innerHTML = nowPlaying.artist +
+                                                             " - " + nowPlaying.title;
+                        pp.src = "public/assets/images/pause.png";
+                }
         }
-    }
 }
 
 function showLogin(isLoggedIn) {
@@ -138,9 +139,55 @@ function auth(path) {
         // asking for email or mobile number at some point.
         xhr.send(JSON.stringify({
                                 password: document.getElementById("password").value,
-                                username: document.getElementById("username").value,
+                                username: document.getElementById("username").value
         }));
 }
+
+
+function loadTracks(category) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/api/getTracks");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function() {
+                if (xhr.status === 200) {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.success == "true") {
+                                var listDiv = document.getElementById("updateDiv");
+                                listDiv.innerHTML = res.template;
+                                updateTrackList();
+                                if (category == "FRESH" || category == "HOT") {
+                                        window.history.pushState({}, "page", "/#/" + category);
+                                } else {
+                                        window.history.pushState({}, "page", "/♥/" + category);
+                                }
+                                window.scrollTo(0, 0);
+                                // listDiv.insertAdjacentHTML("beforeend", res.template);
+                        } else {
+                                // handle error
+                        }
+                }
+
+        };
+
+        // For now, all we're sending is a username and password, but we may start
+        // asking for email or mobile number at some point.
+        console.log(category);
+        xhr.send(JSON.stringify({
+                                category: category
+        }));
+        var sb = document.getElementById("sidebar").offsetWidth;
+        var s = document.getElementById("sizer");
+        w = (window.innerWidth - (sb)) + "px";
+        mL = (sb) + "px";
+        s.style.width = w;
+        s.style.marginLeft = mL;
+}
+// function updateSeekerBox() {
+//         var seekerBox = document.getElementById("seekerBox");
+//         seekerBox.style.width = w;
+//         seekerBox.style.marginLeft = mL;
+//         }
 
 function like(trackID, isLoggedIn) {
         if (isLoggedIn == "false") {
@@ -162,6 +209,7 @@ function like(trackID, isLoggedIn) {
                                         document.getElementById("heart_" + trackID).style.backgroundImage = "url(/public/assets/heart_black.svg)";
                                 } else {
                                         // handle error
+                                        console.log("error");
                                 }
                         }
                 };
@@ -169,44 +217,9 @@ function like(trackID, isLoggedIn) {
                 // For now, all we're sending is a username and password, but we may start
                 // asking for email or mobile number at some point.
                 xhr.send(JSON.stringify({
-                                        id: trackID,
+                                        id: trackID
                 }));
 
         }
 }
 
-function loadTracks(category) {
-  var xhr = new XMLHttpRequest();
-
-          xhr.open("POST", "/api/getTracks");
-          xhr.setRequestHeader("Content-Type", "application/json");
-          xhr.onload = function() {
-                  if (xhr.status === 200) {
-                          var res = JSON.parse(xhr.responseText);
-                          if (res.success == "true") {
-                                  var listDiv = document.getElementById("sizer");
-                                  listDiv.innerHTML = res.template;
-                                  updateTrackList();
-                                  if (category == "FRESH" || category == "HOT") {
-                                        window.history.pushState({},
-                                                "page", "/#/" + category);
-                                  } else {
-                                        window.history.pushState({},
-                                                "page", "/♥/" + category);
-                                  }
-                                  window.scrollTo(0, 0);
-                                  // listDiv.insertAdjacentHTML("beforeend", res.template);
-                          } else {
-                                  // handle error
-                          }
-                  }
-          };
-
-          // For now, all we're sending is a username and password, but we may start
-          // asking for email or mobile number at some point.
-          console.log(category);
-          xhr.send(JSON.stringify({
-                                  category: category,
-          }));
-
-}
